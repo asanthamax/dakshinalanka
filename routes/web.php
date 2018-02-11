@@ -77,6 +77,24 @@ Route::group(['middleware' => ['login']],function(){
     Route::post('/updatestock','StockController@updateStock');
 
     Route::post('/deletestock','StockController@deleteStock');
+
+    Route::post('/addcredit','CreditController@addCreditPayment');
+
+    Route::post('/updatecredit','CreditController@updateCreditPayment');
+
+    Route::post('/deletecredit','CreditController@deleteCreditPayment');
+
+    Route::get('/savecredit','CreditController@saveCreditPayment');
+
+    Route::get('/editcredit/{creditID}','CreditController@editCreditPayment');
+
+    Route::get('/removecredit/{creditID}','CreditController@removeCreditPayment');
+
+    Route::get('/viewcredit/{creditID}','CreditController@viewCreditPayment');
+
+    Route::get('/credits','CreditController@index');
+
+    Route::post('/getprice','InvoiceController@getPrice');
 });
 
 

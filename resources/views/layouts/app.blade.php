@@ -91,6 +91,8 @@
         });
     });
 
+
+
 </script>
 <script src="{{asset('bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->

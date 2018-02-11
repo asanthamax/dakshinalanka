@@ -27,4 +27,10 @@ if(!function_exists('load_customers')){
         $customer = \App\Customer::find($customerID);
         return $customer->customer_name;
     }
+
+    function load_invoice_amount($invoice_id){
+
+        $amount = \App\Invoice_description::where('invoice_id', $invoice_id)->sum('amount');
+        return $amount;
+    }
 }

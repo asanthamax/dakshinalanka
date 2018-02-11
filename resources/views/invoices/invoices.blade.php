@@ -16,6 +16,12 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
 
+            @if(Session::has('success'))
+                <div id="message" class="alert alert-success">{{session('success')}}</div>
+            @endif
+            @if(Session::has('error'))
+                <div id="message" class="alert alert-danger">{{session('error')}}</div>
+            @endif
             <div class="col-md-12">
 
                 <div class="box">
@@ -38,39 +44,21 @@
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>6201</td>
-                                <td>British Cosmetic</td>
-                                <td>2018/01/04</td>
-                                <td>25000</td>
-                                <td><a class="btn btn-success" href="#"><i class="fa fa-pencil"></i></a>
-                                    <a class="btn btn-danger" href="#"><i class="fa fa-trash-o"></i></a>
-                                    <a class="btn btn-primary" href="#"><i class="fa fa-eye"></i></a>
-                                    <a class="btn btn-default" href="#"><i class="fa fa-print"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6202</td>
-                                <td>Sidhalepha</td>
-                                <td>2018/01/05</td>
-                                <td>35000</td>
-                                <td><a class="btn btn-success" href="#"><i class="fa fa-pencil"></i></a>
-                                    <a class="btn btn-danger" href="#"><i class="fa fa-trash-o"></i></a>
-                                    <a class="btn btn-primary" href="#"><i class="fa fa-eye"></i></a>
-                                    <a class="btn btn-default" href="#"><i class="fa fa-print"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6203</td>
-                                <td>ABC</td>
-                                <td>2018/01/08</td>
-                                <td>40000</td>
-                                <td><a class="btn btn-success" href="#"><i class="fa fa-pencil"></i></a>
-                                    <a class="btn btn-danger" href="#"><i class="fa fa-trash-o"></i></a>
-                                    <a class="btn btn-primary" href="#"><i class="fa fa-eye"></i></a>
-                                    <a class="btn btn-default" href="#"><i class="fa fa-print"></i></a>
-                                </td>
-                            </tr>
+                                <?php foreach ($invoices as $invoice): ?>
+                                <tr>
+                                    <td>{{$invoice->invoice_id}}</td>
+                                    <td>{{load_customers($invoice->customer_id)}}</td>
+                                    <td>{{$invoice->date}}</td>
+                                    <td>{{load_invoice_amount($invoice->invoice_id)}}</td>
+                                    <td>
+                                        <a class="btn btn-success" href="{{url('editinvoice')}}"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-danger" href="{{url('removeinvoice')}}"><i class="fa fa-trash-o"></i></a>
+                                        <a class="btn btn-primary" href="{{url('viewinvoice')}}"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-default" href="{{url('printinvoice')}}"><i class="fa fa-print"></i></a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+
                             </tbody>
                         </table>
                     </div>

@@ -37,7 +37,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="{{url('/credits')}}">
                 <i class="fa fa-pie-chart"></i>
                 <span>Balance Payments</span>
             </a>
