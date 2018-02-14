@@ -60,6 +60,14 @@
 
                                         <div class="col-sm-2 col-md-2 col-xs-2">
 
+                                          {{Form::select('sheet_types', $sheet_types, old('sheet_types'), array('class' => 'form-control sheet_types'))}}
+                                        </div>
+                                        <div class="col-sm-2 col-md-2 col-xs-2">
+
+                                          <select class="thickness form-control" name="thickness"></select>
+                                        </div>
+                                        <div class="col-sm-2 col-md-2 col-xs-2">
+
                                             <select name="size" class="size form-control">
                                                 <option value="">Please Select the size</option>
                                                 <option value="sqft_price">Square Feet</option>
@@ -71,15 +79,11 @@
 
                                             <input type="text" name="qty[]" class="form-control" placeholder="Enter Quantity" onchange="calculateAmount($(this))">
                                         </div>
-                                        <div class="col-sm-3 col-md-3 col-xs-3">
+                                        <div class="col-sm-2 col-md-2 col-xs-2">
 
                                             <input type="text" name="particulars[]" class="form-control" placeholder="Enter Particulars">
                                         </div>
                                         <div class="col-sm-1 col-md-1 col-xs-1">
-
-                                            <input type="text" name="desc[]" class="form-control" placeholder="@">
-                                        </div>
-                                        <div class="col-sm-3 col-md-3 col-xs-3">
 
                                             <input type="text" name="amount[]"  class="form-control amount" placeholder="Enter amount">
                                         </div>
@@ -191,6 +195,31 @@
             $(document).on('click','a.close_btn_laser',function(){
 
                 $(this).closest('.row').remove();
+            })
+
+            $('.sheet_types').change(function(){
+
+              var sheet_type = $(this).val();
+              $.ajax({
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url:'{{url('gethickness')}}',
+                type:'POST',
+                dataType:'json',
+                data: {sheet_type: sheet_type},
+                success:function(data){
+
+                  console.log(data);
+                  $(this).closest('.thickness').append();
+                },
+                error:function(){
+
+                  alert("Can't Connect to Server");
+                }
+              });
+
             })
         })
 

@@ -95,6 +95,6 @@ Route::group(['middleware' => ['login']],function(){
     Route::get('/credits','CreditController@index');
 
     Route::post('/getprice','InvoiceController@getPrice');
+
+    Route::post('/gethickness','InvoiceController@getThickness');
 });
-
-

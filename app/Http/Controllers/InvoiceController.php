@@ -29,17 +29,35 @@ class InvoiceController extends Controller
 
         $customers = Customer::all();
         $data['customers_list'] = load_combo_fromdb($customers,'customerID','customer_name','Please Select a Customer');
+        $types = Stock::select('sheet_type')->distinct()->get();
+        $data['sheet_types'] = load_combo_fromdb($types,'sheet_type','sheet_type','Please Select a Sheet Type');
+
         return view('invoices.invoice', $data);
     }
 
     public function getPrice(Request $request){
 
         $thin = $request->input('diameter');
-        $price_size = $request->input('price');
-        $stock = Stock::where('sheet_thickness', $thin)->select('*')->get();
-        echo '<pre>';
-        print_r($stock);
+        $sheet_type = $request->input('sheet_type');
+        $stock = Stock::where('sheet_type',$sheet_type)
+                        ->where('sheet_thickness', $thin)
+                        ->select('*')
+                        ->get();
+      /*  echo '<pre>';
+        print_r($stock);*/
         echo json_encode(array('msg' => $stock->$price_size));
+    }
+
+    public function getThickness(Request $request){
+
+        $sheet_type = $request->input('sheet_type');
+        $thickness = Stock::where('sheet_type',$sheet_type)->select('*')->get();
+        $thick = array();
+        foreach($thickness as $th){
+
+          $thick[] = $th->sheet_thickness;
+        }
+        echo json_encode($thick);
     }
 
     public function addInvoice(Request $request){
