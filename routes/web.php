@@ -97,4 +97,16 @@ Route::group(['middleware' => ['login']],function(){
     Route::post('/getprice','InvoiceController@getPrice');
 
     Route::post('/gethickness','InvoiceController@getThickness');
+
+    Route::post('/saveinvoice','InvoiceController@addInvoice');
+
+    Route::get('/editinvoice/{invoiceID}','InvoiceController@getInvoice');
+
+    Route::post('/updateinvoice','InvoiceController@updateInvoice');
+
+    Route::post('/deleteinvoice','InvoiceController@deleteInvoice');
+
+    Route::get('/removeinvoice/{invoiceID}','InvoiceController@removeInvoice');
+
+    Route::get('/viewinvoice/{invoiceID}','InvoiceController@viewInvoice');
 });

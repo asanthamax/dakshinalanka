@@ -60,15 +60,15 @@
 
                                         <div class="col-sm-2 col-md-2 col-xs-2">
 
-                                          {{Form::select('sheet_types', $sheet_types, old('sheet_types'), array('class' => 'form-control sheet_types'))}}
+                                          {{Form::select('sheet_types[]', $sheet_types, old('sheet_types'), array('class' => 'form-control sheet_types','onchange' => 'loadThickness($(this))'))}}
                                         </div>
                                         <div class="col-sm-2 col-md-2 col-xs-2">
 
-                                          <select class="thickness form-control" name="thickness"></select>
+                                          <select class="thickness form-control" name="thickness[]"></select>
                                         </div>
                                         <div class="col-sm-2 col-md-2 col-xs-2">
 
-                                            <select name="size" class="size form-control">
+                                            <select name="size[]" class="size form-control">
                                                 <option value="">Please Select the size</option>
                                                 <option value="sqft_price">Square Feet</option>
                                                 <option value="price64">64 x 64</option>
@@ -107,7 +107,7 @@
                                         </div>
                                         <div class="col-sm-4 col-md-4 col-lg-4">
 
-                                            <input type="text" name="laser_cutting_amount" class="form-control" placeholder="Enter Amount">
+                                            <input type="text" name="laser_cutting_amount[]" class="form-control" placeholder="Enter Amount">
                                         </div>
                                         <div class="col-md-1 col-sm-1 col-xs-1">
                                             <a class="btn btn-danger close_btn_laser" href="javascript:void(0);">X</a>
@@ -135,34 +135,40 @@
             $('#new_row').click(function(){
 
                 $('#print_records').append('<br><div class="row">'+
-                        '<div class="col-sm-2 col-md-2 col-xs-2">'+
 
-                        '<select name="size" class="size form-control">'+
-                        '<option value="">Please Select the size</option>'+
-                        '<option value="price64">64 x 64</option>'+
-                        '<option value="price84">84 x 84</option>'+
+                    '<div class="col-sm-2 col-md-2 col-xs-2">'+
+
+                      '{{Form::select('sheet_types[]', $sheet_types, old('sheet_types'), array('class' => 'form-control sheet_types','onchange' => 'loadThickness($(this))'))}}'+
+                    '</div>'+
+                    '<div class="col-sm-2 col-md-2 col-xs-2">'+
+
+                      '<select class="thickness form-control" name="thickness[]"></select>'+
+                    '</div>'+
+                    '<div class="col-sm-2 col-md-2 col-xs-2">'+
+
+                        '<select name="size[]" class="size form-control">'+
+                            '<option value="">Please Select the size</option>'+
+                            '<option value="sqft_price">Square Feet</option>'+
+                            '<option value="price64">64 x 64</option>'+
+                            '<option value="price84">84 x 84</option>'+
                         '</select>'+
-                        '</div>'+
-                        '<div class="col-sm-2 col-md-2 col-xs-2">'+
+                    '</div>'+
+                    '<div class="col-sm-2 col-md-2 col-xs-2">'+
 
-                        '<input type="text" name="qty[]" class="form-control" placeholder="Enter Quantity">'+
-                        '</div>'+
-                        '<div class="col-sm-3 col-md-3 col-xs-3">'+
+                        '<input type="text" name="qty[]" class="form-control" placeholder="Enter Quantity" onchange="calculateAmount($(this))">'+
+                    '</div>'+
+                    '<div class="col-sm-2 col-md-2 col-xs-2">'+
 
                         '<input type="text" name="particulars[]" class="form-control" placeholder="Enter Particulars">'+
-                        '</div>'+
-                        '<div class="col-sm-1 col-md-1 col-xs-1">'+
+                    '</div>'+
+                    '<div class="col-sm-1 col-md-1 col-xs-1">'+
 
-                        '<input type="text" name="desc[]" class="form-control" placeholder="@">'+
-                        '</div>'+
-                        '<div class="col-sm-3 col-md-3 col-xs-3">'+
-
-                        '<input type="text" name="amount[]" class="form-control amount" placeholder="Enter amount">'+
-                        '</div>'+
-                        '<div class="col-md-1 col-sm-1 col-xs-12">'+
+                        '<input type="text" name="amount[]"  class="form-control amount" placeholder="Enter amount">'+
+                    '</div>'+
+                    '<div class="col-md-1 col-sm-1 col-xs-1">'+
                         '<a class="btn btn-danger close_btn" href="javascript:void(0);">X</a>'+
-                        '</div>'+
-                        '</div>')
+                    '</div>'+
+                '</div>')
             });
 
 
@@ -180,7 +186,7 @@
                         '</div>'+
                         '<div class="col-sm-4 col-md-4 col-lg-4">'+
 
-                        '<input type="text" name="laser_cutting_amount" class="form-control" placeholder="Enter Amount">'+
+                        '<input type="text" name="laser_cutting_amount[]" class="form-control" placeholder="Enter Amount">'+
                         '</div>'+
                         '<div class="col-md-1 col-sm-1 col-xs-1">'+
                         '<a class="btn btn-danger close_btn_laser" href="javascript:void(0);">X</a>'+
@@ -197,9 +203,12 @@
                 $(this).closest('.row').remove();
             })
 
-            $('.sheet_types').change(function(){
+          });
 
-              var sheet_type = $(this).val();
+            function loadThickness(ele){
+
+              var sheet_type = ele.val();
+              var element = ele;
               $.ajax({
 
                 headers: {
@@ -212,19 +221,27 @@
                 success:function(data){
 
                   console.log(data);
-                  $(this).closest('.thickness').append();
+                  $.each(data,function(index, el) {
+
+                    console.log(element.hasClass('sheet_types'));
+                    element.parent().next().find('.thickness').append('<option value="'+el+'">'+el+'</option>');
+                  });
+
                 },
                 error:function(){
 
                   alert("Can't Connect to Server");
                 }
               });
-
-            })
-        })
+            }
 
         function calculateAmount(amount) {
 
+            var sheet_type = amount.parent().parent().find('.sheet_types').val();
+            var thickness = amount.parent().parent().find('.thickness').val();
+            var size = amount.parent().parent().find('.size').val();
+            console.log(sheet_type);
+            console.log(thickness);
             $.ajax({
 
                 headers: {
@@ -233,10 +250,11 @@
                 type: 'post',
                 url: '{{url('getprice')}}',
                 dataType: 'json',
-                data: {diameter: amount.val(), price: amount.closest('.size').val()},
+                data: {sheet_type: sheet_type, thickness: thickness, size: size},
                 success:function (data) {
 
-                    amount.closest('.amount').val(data.msg);
+                    //console.log(data.msg);
+                    amount.parent().parent().find('.amount').val(data.msg*amount.val());
                 },
                 error:function(){
 

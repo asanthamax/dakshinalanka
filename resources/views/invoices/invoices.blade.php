@@ -40,20 +40,20 @@
                                 <th>Invoice ID</th>
                                 <th>Client</th>
                                 <th>Date</th>
-                                <th>Total Amount</th>
+                                <th>Total Amount(Rs:)</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
                                 <?php foreach ($invoices as $invoice): ?>
                                 <tr>
-                                    <td>{{$invoice->invoice_id}}</td>
-                                    <td>{{load_customers($invoice->customer_id)}}</td>
+                                    <td>{{$invoice->invoiceID}}</td>
+                                    <td>{{load_customers($invoice->customer)}}</td>
                                     <td>{{$invoice->date}}</td>
-                                    <td>{{load_invoice_amount($invoice->invoice_id)}}</td>
+                                    <td>{{load_invoice_amount($invoice->invoiceID)}}</td>
                                     <td>
-                                        <a class="btn btn-success" href="{{url('editinvoice')}}"><i class="fa fa-pencil"></i></a>
-                                        <a class="btn btn-danger" href="{{url('removeinvoice')}}"><i class="fa fa-trash-o"></i></a>
-                                        <a class="btn btn-primary" href="{{url('viewinvoice')}}"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-success" href="{{url('editinvoice/'.$invoice->invoiceID)}}"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-danger" href="{{url('removeinvoice/'.$invoice->invoiceID)}}"><i class="fa fa-trash-o"></i></a>
+                                        <a class="btn btn-primary" href="{{url('viewinvoice/'.$invoice->invoiceID)}}"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-default" href="{{url('printinvoice')}}"><i class="fa fa-print"></i></a>
                                     </td>
                                 </tr>
