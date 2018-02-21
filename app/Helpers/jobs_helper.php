@@ -34,3 +34,23 @@ if(!function_exists('load_customers')){
         return $amount;
     }
 }
+
+if(!function_exists('load_size_thickness')){
+
+  function load_size_thickness($sheet_type, $thick){
+
+    $dropdown = "<select class='thickness form-control' name='thickness[]'>";
+    $thickness = \App\Stock::where('sheet_type',$sheet_type)->select('*')->get();
+    foreach($thickness as $th){
+
+      if($th->sheet_thickness==$thick){
+
+        $dropdown .= "<option value='".$th->sheet_thickness."' selected>".$th->sheet_thickness."</option>";
+      }else{
+
+        $dropdown .= "<option value='".$th->sheet_thickness."'>".$th->sheet_thickness."</option>";
+      }
+    }
+    return $dropdown;
+  }
+}

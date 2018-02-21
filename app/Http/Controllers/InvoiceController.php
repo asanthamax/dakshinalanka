@@ -240,6 +240,11 @@ class InvoiceController extends Controller
       return view('invoices.editinvoice', $data);
     }
 
+    public function printInvoice(){
+
+
+    }
+
     public function removeInvoice($invoiceID){
 
       $invoice = Invoice::find($invoiceID);

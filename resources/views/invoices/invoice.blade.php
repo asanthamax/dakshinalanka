@@ -221,9 +221,10 @@
                 success:function(data){
 
                   console.log(data);
+                  element.parent().next().find('.thickness').empty();
                   $.each(data,function(index, el) {
 
-                    console.log(element.hasClass('sheet_types'));
+                    console.log(element.hasClass('sheet_types'));      
                     element.parent().next().find('.thickness').append('<option value="'+el+'">'+el+'</option>');
                   });
 

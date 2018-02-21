@@ -67,6 +67,7 @@
                                         <div class="col-sm-2 col-md-2 col-xs-2">
                                           <label>Thickness</label>
                                           <br>
+                                          <?php echo load_size_thickness($details['sheet_type'], $details['thickness']); ?>
                                           <select class="thickness form-control" name="thickness[]" onload="initial_load('<?php echo $details['sheet_type']; ?>','<?php echo $details['thickness']; ?>',$(this))" <?php echo $disable; ?>></select>
                                         </div>
                                         <div class="col-sm-2 col-md-2 col-xs-2">
@@ -259,6 +260,7 @@
                 success:function(data){
 
                   console.log(data);
+                  element.parent().next().find('.thickness').empty();
                   $.each(data,function(index, el) {
 
                     console.log(element.hasClass('sheet_types'));
@@ -273,40 +275,6 @@
               });
             }
 
-            function initial_load(sheet_type,thickness,ele){
-
-              console.log('here....');
-              $.ajax({
-
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url:'{{url('gethickness')}}',
-                type:'POST',
-                dataType:'json',
-                data: {sheet_type: sheet_type},
-                success:function(data){
-
-                  console.log(data);
-                  $.each(data,function(index, el) {
-
-                    console.log(element.hasClass('sheet_types'));
-                    if(thickness==el){
-
-                      ele.append('<option value="'+el+'" selected>'+el+'</option>');
-                    }else{
-
-                      ele.append('<option value="'+el+'">'+el+'</option>');
-                    }
-                  });
-
-                },
-                error:function(){
-
-                  alert("Can't Connect to Server");
-                }
-              });
-            }
 
         function calculateAmount(amount) {
 
