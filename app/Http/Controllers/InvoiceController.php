@@ -353,4 +353,46 @@ class InvoiceController extends Controller
       $request->session()->flash('success','Invoice Deleted Successfully!!!');
       return redirect()->to('/invoices');
     }
+    
+     public function printInvoice($invoiceID){
+
+        $invoice = Invoice::find($invoiceID);
+        $invoice_description = Invoice_description::where('invoice_id', $invoiceID)->select('*')->get();
+        $invoice_det = array(
+            'customer' => $invoice->customer,
+            'date' => $invoice->date
+        );
+        $invoice_details = array();
+        $invoice_details_laser = array();
+        foreach($invoice_description as $description){
+            if($description->type=='non laser'){
+                $invoice_details[] = array(
+                    'description' => $description->description,
+                    'quantity' => $description->quantity,
+                    'amount' => $description->amount,
+                    'sheet_type' => $description->sheet_type,
+                    'thickness' => $description->thickness,
+                    'size' => $description->size
+                );
+            }else{
+                $invoice_details_laser[] = array(
+                    'description' => $description->description,
+                    'amount' => $description->amount,
+                    'duration' => $description->type
+                );
+            }
+        }
+        $data['invoice_details'] = $invoice_details;
+        $data['invoice_details_laser'] = $invoice_details_laser;
+        $data['invoice_id'] = $invoiceID;
+        $data['invoice'] = $invoice_det;
+        $customers = Customer::all();
+        $data['customers_list'] = load_combo_fromdb($customers,'customerID','customer_name','Please Select a Customer');
+        $types = Stock::select('sheet_type')->distinct()->get();
+        $data['sheet_types'] = load_combo_fromdb($types,'sheet_type','sheet_type','Please Select a Sheet Type');
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('invoices.printlayout', $data)->setOptions(['defaultPaperSize' => 'a5']);
+        return $pdf->stream();
+        //return view('invoices.printlayout', $data);
+    }
 }
